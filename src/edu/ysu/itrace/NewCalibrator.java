@@ -2,6 +2,8 @@ package edu.ysu.itrace;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Random;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -95,6 +97,17 @@ public abstract class NewCalibrator extends JFrame {
 	        points[7] = new Point( ( 3*screenSize.width )/4,screenSize.height/2 );
 	        points[8] = new Point( ( 3*screenSize.width )/4,( 3*screenSize.height )/4 );
 	        points[9] = new Point( -75,-75 );
+	        
+	        Random rand = new Random();
+	        Point tmp;
+
+	        for( int i=8;i>0;i-- ){
+	            int j = rand.nextInt(i);
+	            tmp = points[j];
+	            points[j] = points[i];
+	            points[i] = tmp;
+	        }
+	        
 	        originIndex = 9;
 	        destinationIndex = 0;
 	        //setting sprite parameters.
