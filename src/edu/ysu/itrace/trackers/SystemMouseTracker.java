@@ -99,6 +99,28 @@ public class SystemMouseTracker implements IEyeTracker {
         	//Do nothing.
         }
     }
+    private class NewCal extends NewCalibrator {
+    	public NewCal() throws Exception {
+    		super();
+    	}
+    	
+    	protected void startCalibration() throws Exception {
+            //Do nothing.
+        }
+
+        protected void stopCalibration() throws Exception {
+            //Do nothing.
+        }
+
+        protected void useCalibrationPoint(double x, double y)
+                throws Exception {
+            //Do nothing.
+        }
+        
+        protected void displayCalibrationStatus() throws Exception {
+        	//Do nothing.
+        }
+    }
 
     private LinkedBlockingQueue<Gaze> gazePoints
             = new LinkedBlockingQueue<Gaze>();
@@ -128,6 +150,9 @@ public class SystemMouseTracker implements IEyeTracker {
         } catch (Exception e) {
         	throw new CalibrationException("Cannot display calibration status!");
         }
+    }
+    public void newCal() throws Exception {
+    	new NewCal();
     }
 
     public void startTracking() throws IOException {

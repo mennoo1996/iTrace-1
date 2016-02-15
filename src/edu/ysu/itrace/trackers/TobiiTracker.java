@@ -102,6 +102,48 @@ public class TobiiTracker implements IEyeTracker {
         		IOException;
     }
 
+    private class NewCal extends NewCalibrator {
+    	public NewCal() throws Exception {
+    		super();
+    	}
+    	
+    	protected void startCalibration() throws Exception {
+            jniStartCalibration();
+        }
+
+        protected void stopCalibration() throws Exception {
+            jniStopCalibration();
+        }
+
+        protected void useCalibrationPoint(double x, double y)
+                throws Exception {
+            jniAddPoint(x, y);
+        }
+        
+        protected void displayCalibrationStatus() throws Exception {
+        	double[] pointsNormalized = jniGetCalibration();
+        	int itemCount = pointsNormalized.length/4;
+
+        	for (int i = 0; i < pointsNormalized.length; i++) {
+        		if (pointsNormalized[i] < 0.0001) {
+        			pointsNormalized[i] = 0.0001;
+        		} else if (pointsNormalized[i] > .9999) {
+        			pointsNormalized[i] = .9999;
+        		} else {
+        			//do nothing
+        		}
+        	}
+        }
+        private native void jniAddPoint(double x, double y)
+                throws RuntimeException, IOException;
+        private native void jniStartCalibration() throws RuntimeException,
+                IOException;
+        private native void jniStopCalibration() throws RuntimeException,
+                IOException;
+        private native double[] jniGetCalibration() throws RuntimeException,
+        		IOException;
+    }
+    
     private BackgroundThread bg_thread = null;
     private volatile ByteBuffer native_data = null;
     private LinkedBlockingQueue<Gaze> gaze_points =
@@ -191,6 +233,10 @@ public class TobiiTracker implements IEyeTracker {
         } catch (Exception e) {
         	throw new CalibrationException("Cannot display calibration status!");
         }
+    }
+    public void newCal() throws Exception{
+    	//TODO: implement newCal.
+    	new NewCal();
     }
 
     public Gaze getGaze() {

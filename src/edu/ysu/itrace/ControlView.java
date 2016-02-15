@@ -1,5 +1,6 @@
 package edu.ysu.itrace;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -9,10 +10,16 @@ import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.swing.JFrame;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JLabel;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -22,6 +29,7 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -32,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.browser.*;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
@@ -95,7 +104,6 @@ public class ControlView extends ViewPart implements IPartListener2,
     		new CopyOnWriteArrayList<IFilter>();
     
     private SessionInfoHandler sessionInfo = new SessionInfoHandler();
-
     /*
      * Gets gazes from the eye tracker, calls gaze handlers, and adds responses
      * to the queue for the response handler thread to process.
@@ -214,6 +222,26 @@ public class ControlView extends ViewPart implements IPartListener2,
                     // raised an error.
                 }
             }
+        });
+        
+        Button newCalButton = new Button(buttonComposite, SWT.PUSH);
+        newCalButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+                true, 1, 1));
+        newCalButton.setText("newCal");
+        newCalButton.addSelectionListener(new SelectionAdapter() {
+        	@Override
+            public void widgetSelected(SelectionEvent e) {
+        		requestTracker();
+        		if(tracker != null) {
+        			try {
+						tracker.newCal();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+        		}
+        		
+        	}
         });
         
         final Button startButton = new Button(buttonComposite, SWT.PUSH);
@@ -428,10 +456,7 @@ public class ControlView extends ViewPart implements IPartListener2,
             }
         });
         
-        Button visualizeButton = new Button(buttonComposite, SWT.PUSH);
-        visualizeButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-                true, 1, 1));
-        visualizeButton.setText("Visualize");
+
         
         //Configure Filters Here
         OldJSONBasicFixationFilter oldjsonBFFilter =

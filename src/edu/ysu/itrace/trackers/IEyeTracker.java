@@ -24,6 +24,7 @@ public interface IEyeTracker {
     Starts eye tracking and collecting data.
     @throws IOException Failed to start eye tracking.
     */
+    public void newCal() throws Exception;
     public void startTracking() throws IOException;
     /**
     Stops eye tracking. Current data still available via getGaze, but no new
