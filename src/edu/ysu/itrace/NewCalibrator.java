@@ -85,7 +85,7 @@ public abstract class NewCalibrator extends JFrame {
 	    }
 		
 		public Animation() throws Exception {
-			setBackground(Color.darkGray);
+			setBackground(Color.white);
 			//Setting points based on screen dimensions
 			points[0] = new Point( screenSize.width/4,screenSize.height/4 );
 	        points[1] = new Point( screenSize.width/4,screenSize.height/2 );
