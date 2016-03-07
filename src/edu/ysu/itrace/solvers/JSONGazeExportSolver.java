@@ -20,6 +20,7 @@ import com.google.gson.stream.JsonWriter;
 import edu.ysu.itrace.AstManager.SourceCodeEntity;
 import edu.ysu.itrace.gaze.IGazeResponse;
 import edu.ysu.itrace.gaze.IStyledTextGazeResponse;
+import edu.ysu.itrace.trackers.TheEyeTribeTracker;
 
 /**
  * Solver that simply dumps gaze data to disk in JSON format.
@@ -183,6 +184,9 @@ public class JSONGazeExportSolver implements IFileExportSolver {
     	filename = "gaze-responses-" + devUsername +
     			"-" + sessionID + ".json";
     	this.sessionID = sessionID;
+    	String workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+    	
+    	TheEyeTribeTracker.handleFile(workspaceLocation + "/" + sessionID + "/" + filename);
     }
     
     @Override

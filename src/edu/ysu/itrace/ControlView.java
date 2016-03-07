@@ -53,6 +53,7 @@ import edu.ysu.itrace.solvers.ISolver;
 import edu.ysu.itrace.solvers.JSONGazeExportSolver;
 import edu.ysu.itrace.solvers.XMLGazeExportSolver;
 import edu.ysu.itrace.trackers.IEyeTracker;
+import edu.ysu.itrace.trackers.TheEyeTribeTracker;
 
 /**
  * ViewPart for managing and controlling the plugin.
@@ -339,6 +340,11 @@ public class ControlView extends ViewPart implements IPartListener2,
 
         xmlSolver = new XMLGazeExportSolver();
         availableSolvers.add(xmlSolver);
+        
+        String file = jsonSolver.getFilename();
+        
+       // TheEyeTribeTracker.handleFile(file);
+        
 
         for (final ISolver solver : availableSolvers) {
             final Button solverEnabled =
@@ -574,6 +580,7 @@ public class ControlView extends ViewPart implements IPartListener2,
         }
     }
 
+    
     /**
      * Recursive helper method for setupStyledText(IWorkbenchPartReference).
      * 
@@ -613,7 +620,7 @@ public class ControlView extends ViewPart implements IPartListener2,
                             childrenQueue.add(nextChildren);
                         }
                     }
-
+                    
                     IGazeHandler handler =
                             (IGazeHandler) child
                                     .getData(HandlerBindManager.KEY_HANDLER);
@@ -625,7 +632,7 @@ public class ControlView extends ViewPart implements IPartListener2,
                 }
             }
         }
-
+        IGazeHandler rootHandler= (IGazeHandler) rootShell.getData(HandlerBindManager.KEY_HANDLER);
         return null;
     }
 

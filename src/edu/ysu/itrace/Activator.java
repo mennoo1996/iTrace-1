@@ -11,8 +11,7 @@ import edu.ysu.itrace.preferences.PluginPreferences;
  */
 public class Activator extends AbstractUIPlugin {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "edu.ysu.itrace"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "edu.ysu.itraceIsh"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;
@@ -31,8 +30,10 @@ public class Activator extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         IPreferenceStore prefStore = getDefault().getPreferenceStore();
-        EyeTrackerFactory.setTrackerType(EyeTrackerFactory.TrackerType.valueOf(
-                prefStore.getString(PluginPreferences.EYE_TRACKER_TYPE)));
+        EyeTrackerFactory.setTrackerType(EyeTrackerFactory.TrackerType.SYSTEM_MOUSE_TRACKER);
+        
+        //EyeTrackerFactory.setTrackerType(EyeTrackerFactory.TrackerType.valueOf(
+              //  prefStore.getString(PluginPreferences.EYE_TRACKER_TYPE)));
     }
 
     /*

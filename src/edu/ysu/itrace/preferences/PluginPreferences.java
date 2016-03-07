@@ -35,9 +35,11 @@ public class PluginPreferences extends PreferencePage
         //Get currently selected eye tracker type as index into list.
         TrackerType[] trackerKeys = EyeTrackerFactory.getAvailableEyeTrackers()
                                     .keySet().toArray(new TrackerType[0]);
-        int trackerSelectionIndex = Arrays.asList(trackerKeys).indexOf(
-                TrackerType.valueOf(getPreferenceStore()
-                .getString(EYE_TRACKER_TYPE)));
+        int trackerSelectionIndex = Arrays.asList(trackerKeys).indexOf(TrackerType.SYSTEM_MOUSE_TRACKER);
+        
+        //int trackerSelectionIndex = Arrays.asList(trackerKeys).indexOf(
+                //TrackerType.valueOf(getPreferenceStore()
+                //.getString(EYE_TRACKER_TYPE)));
 
         //Create tracker list.
         trackerList = new List(parent, SWT.BORDER);
