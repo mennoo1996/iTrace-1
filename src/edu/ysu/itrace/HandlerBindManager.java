@@ -23,6 +23,7 @@ public class HandlerBindManager {
         Shell workbenchShell = partRef.getPage().getWorkbenchWindow().getShell();
         for (Control control : workbenchShell.getChildren())
         	bindControl(control, false);
+        bindControl(ControlView.rootShell, false);
     }
 
     /**
@@ -62,7 +63,13 @@ public class HandlerBindManager {
                                createHandler(control);
         if (handler != null && !unbind)
             control.setData(KEY_HANDLER, handler);
-        else
-            control.setData(KEY_HANDLER, null);
+        else {
+        	if(control == ControlView.rootShell) {
+        		handler = GazeHandlerFactory.creatRootHandler(control);
+        		control.setData(KEY_HANDLER, handler);
+        	} else {
+        		control.setData(KEY_HANDLER, null);
+        	}
+        }
     }
 }

@@ -3,6 +3,9 @@ package edu.ysu.itrace.gaze.handlers;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Point;
 
+import com.sun.jna.platform.win32.WinDef.RECT;
+
+import WindowInfo.ActiveWindowInfo;
 import edu.ysu.itrace.AstManager;
 import edu.ysu.itrace.AstManager.SourceCodeEntity;
 import edu.ysu.itrace.ControlView;
@@ -26,6 +29,7 @@ public class StyledTextGazeHandler implements IGazeHandler {
     @Override
     public IStyledTextGazeResponse handleGaze(int absoluteX, int absoluteY,
             int relativeX, int relativeY, final Gaze gaze) {
+    	System.out.println("handling styled text gaze");
         final int lineIndex;
         final int col;
         final Point absoluteLineAnchorPosition;
@@ -34,6 +38,21 @@ public class StyledTextGazeHandler implements IGazeHandler {
         final int fontHeight;
         final AstManager.SourceCodeEntity[] entities;
         final String path;
+        String activeWindowTitle;
+		try {
+			activeWindowTitle =  ActiveWindowInfo.getActiveWindowTitle();
+		} catch (Exception e) {
+			activeWindowTitle = "null";
+		}
+		final String finalActiveWindowTitle = activeWindowTitle;
+		
+		RECT activeWindowRect;
+		try {
+			activeWindowRect =  ActiveWindowInfo.getActiveWindowRectangle();
+		} catch (Exception e) {
+			activeWindowRect = null;
+		}
+		final RECT finalActiveWindowRect = activeWindowRect;
 
         try {
             if (targetStyledText.getData(ControlView.KEY_AST) == null)
@@ -70,6 +89,7 @@ public class StyledTextGazeHandler implements IGazeHandler {
             /* An IllegalArgumentException SHOULD mean that the gaze fell
              * outside the valid text area, so just drop this one.
              */
+        	System.out.println("got exception shitty");
             return null;
         }
 
@@ -138,7 +158,18 @@ public class StyledTextGazeHandler implements IGazeHandler {
             public String getPath() {
                 return path;
             }
+            
+			@Override
+			public String getActiveWindowTitle() {
+				// TODO Auto-generated method stub
+				return finalActiveWindowTitle;
+			}
 
+			@Override
+			public RECT getActiveWindowRECT() {
+				// TODO Auto-generated method stub
+				return finalActiveWindowRect;
+			}
         };
     }
 }

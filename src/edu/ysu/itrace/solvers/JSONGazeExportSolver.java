@@ -113,8 +113,44 @@ public class JSONGazeExportSolver implements IFileExportSolver {
                               .name("system_time")
                               .value(response.getGaze().getSystemTime())
                               .name("nano_time")
-                              .value(response.getGaze().getNanoTime());
+                              .value(response.getGaze().getNanoTime())
+                              .name("active_window_title")
+                              .value(response.getActiveWindowTitle())
+                              .name("active_window_rect")
+                              .beginObject()
+                              .name("left")
+                              .value(response.getActiveWindowRECT().left)
+                              .name("right")
+                              .value(response.getActiveWindowRECT().right)
+                              .name("top")
+                              .value(response.getActiveWindowRECT().top)
+                              .name("bottom")
+                              .value(response.getActiveWindowRECT().bottom)
+                              .endObject();
                 try {
+                	responseWriter
+                	.name("lefteye")
+                	.beginObject()
+                	.name("x")
+                	.value((int) (screenRect.width * response.getGaze().getLeftX()))
+                	.name("y")
+                	.value((int) (screenRect.width * response.getGaze().getLeftY()))
+                	.name("valid")
+                	.value(response.getGaze().getLeftValidity())
+                	.name("pupildiameter")
+                	.value(response.getGaze().getLeftPupilDiameter())
+                	.endObject()
+                	.name("righteye")
+                	.beginObject()
+                	.name("x")
+                	.value((int) (screenRect.width * response.getGaze().getRightX()))
+                	.name("y")
+                	.value((int) (screenRect.width * response.getGaze().getRightY()))
+                	.name("valid")
+                	.value(response.getGaze().getRightValidity())
+                	.name("pupildiameter")
+                	.value(response.getGaze().getRightPupilDiameter())
+                	.endObject();
                     IStyledTextGazeResponse styledResponse =
                             (IStyledTextGazeResponse) response;
                     responseWriter.name("path")
@@ -154,6 +190,8 @@ public class JSONGazeExportSolver implements IFileExportSolver {
                                       .endObject();
                     }
                     responseWriter.endArray();
+                    
+                    
 
                 } catch (ClassCastException e) {
                     // not styled text, oh well

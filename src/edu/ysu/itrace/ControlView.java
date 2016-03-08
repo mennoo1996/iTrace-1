@@ -66,7 +66,7 @@ public class ControlView extends ViewPart implements IPartListener2,
             + "the problem persists, submit a bug report.";
 
     private IEyeTracker tracker = null;
-    private Shell rootShell;
+    public static Shell rootShell;
 
     private CopyOnWriteArrayList<Control> grayedControls =
             new CopyOnWriteArrayList<Control>();
@@ -543,7 +543,8 @@ public class ControlView extends ViewPart implements IPartListener2,
 
     @Override
     public void shellDeactivated(ShellEvent e) {
-        gazeHandlerJob.cancel();
+    	System.out.println("Deactiving shell");
+//        gazeHandlerJob.cancel();
     }
 
     @Override
@@ -553,7 +554,7 @@ public class ControlView extends ViewPart implements IPartListener2,
 
     @Override
     public void shellIconified(ShellEvent e) {
-        gazeHandlerJob.cancel();
+//        gazeHandlerJob.cancel();
     }
 
     /**
@@ -583,8 +584,9 @@ public class ControlView extends ViewPart implements IPartListener2,
      */
     private void setupStyledText(IEditorPart editor, StyledText control) {
         StyledText styledText = (StyledText) control;
-        if (styledText.getData(KEY_AST) == null)
+        if (styledText.getData(KEY_AST) == null) {
             styledText.setData(KEY_AST, new AstManager(editor, styledText));
+        }
     }
 
     /**
@@ -593,19 +595,21 @@ public class ControlView extends ViewPart implements IPartListener2,
      * the gaze is not handled.
      */
     private IGazeResponse handleGaze(int screenX, int screenY, Gaze gaze) {
-
         Queue<Control[]> childrenQueue = new LinkedList<Control[]>();
         childrenQueue.add(rootShell.getChildren());
 
         Rectangle monitorBounds = rootShell.getMonitor().getBounds();
-
+       
         while (!childrenQueue.isEmpty()) {
+//        	System.out.println("checking");
             for (Control child : childrenQueue.remove()) {
                 Rectangle childScreenBounds = child.getBounds();
                 Point screenPos = child.toDisplay(0, 0);
                 childScreenBounds.x = screenPos.x - monitorBounds.x;
-                childScreenBounds.y = screenPos.y - monitorBounds.y;
+                childScreenBounds.y = screenPos.y - monitorBounds.y; 
+               
                 if (childScreenBounds.contains(screenX, screenY)) {
+                	
                     if (child instanceof Composite) {
                         Control[] nextChildren =
                                 ((Composite) child).getChildren();
@@ -617,16 +621,22 @@ public class ControlView extends ViewPart implements IPartListener2,
                     IGazeHandler handler =
                             (IGazeHandler) child
                                     .getData(HandlerBindManager.KEY_HANDLER);
-                    if (child.isVisible() && handler != null) {
-                        return handler.handleGaze(screenX, screenY,
+                    if (child.isVisible() && handler != null && child != rootShell) {
+//                    	 System.out.println("x = " + childScreenBounds.x + "\ny = " + childScreenBounds.y + "\nwidth = " + childScreenBounds.width + "\n height = " + childScreenBounds.height + "\n");
+                    	System.out.println("child isvisible shit");
+                        IGazeResponse response = handler.handleGaze(screenX, screenY,
                                 screenX - childScreenBounds.x, screenY
                                         - childScreenBounds.y, gaze);
+                        if(response != null) return response;
                     }
                 }
             }
         }
 
-        return null;
+        IGazeHandler handler = (IGazeHandler) rootShell.getData(HandlerBindManager.KEY_HANDLER);
+        System.out.println("raw gaze here");
+        return handler.handleGaze(screenX, screenY, screenX, screenY, gaze);
+//        return null;
     }
 
     private boolean requestTracker() {

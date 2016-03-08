@@ -16,6 +16,7 @@ public class EyeTrackerFactory {
     public enum TrackerType {
         SYSTEM_MOUSE_TRACKER,
         TOBII_TRACKER,
+        EYETRIBE_TRACKER,
     }
 
     /**
@@ -28,6 +29,7 @@ public class EyeTrackerFactory {
             = new LinkedHashMap<TrackerType, String>();
         result.put(TrackerType.SYSTEM_MOUSE_TRACKER, "System Mouse Tracker");
         result.put(TrackerType.TOBII_TRACKER, "Tobii Tracker");
+        result.put(TrackerType.EYETRIBE_TRACKER, "Eyetribe tracker");
         return result;
     }
 
@@ -58,6 +60,8 @@ public class EyeTrackerFactory {
                 return (IEyeTracker) new SystemMouseTracker();
             case TOBII_TRACKER:
                 return (IEyeTracker) new TobiiTracker();
+            case EYETRIBE_TRACKER:
+            	return (IEyeTracker) new TheEyeTribeTracker();
             default:
                 return null;
             }

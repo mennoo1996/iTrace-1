@@ -1,5 +1,7 @@
 package edu.ysu.itrace.gaze;
 
+import com.sun.jna.platform.win32.WinDef.RECT;
+
 import edu.ysu.itrace.Gaze;
 
 /**
@@ -27,4 +29,14 @@ public interface IGazeResponse {
      * Returns the gaze handler.
      */
     public IGazeHandler getGazeHandler();
+    
+    /**
+     * returns active window title
+     */
+    public String getActiveWindowTitle();
+    
+    /**
+     * returns active window rect
+     */
+    public RECT getActiveWindowRECT();
 }
