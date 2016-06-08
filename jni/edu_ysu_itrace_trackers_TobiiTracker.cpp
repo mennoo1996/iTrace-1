@@ -69,6 +69,7 @@ JNIEXPORT jboolean JNICALL
 		return JNI_FALSE;
 	else
 	{
+		printf("\n\nHERE\n\n");
 		tobii::sdk::cpp::Library::init();
 		g_already_initialised = true;
 	}
